@@ -1,0 +1,373 @@
+/*
+ * Helper.c
+ *
+ *  Created on: feb 27, 2023
+ *      Author: Alex
+ */
+#include "DisplayHandler.h"
+
+static uint8_t ucProcessPercentage	= 0;
+static eDisplyStatus eDispStatus 	= eDisplayError;
+static bool blUpdateFlag = false;
+
+/* Function Prototypes */
+static void UpadteNotConnectedStatus();
+static void UpdatePercentage();
+static void UpdateDisplayConfigMode();
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Handle display / Update display
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void DisplayHandler()
+{
+	eDisplyStatus eStatus = GetDisplayStatus();
+
+	switch (eStatus)
+	{
+		case eDisplayError:
+			SSD1306_Clear();
+			break;
+		case eDisplayNotConnected:
+			UpadteNotConnectedStatus();
+			break;
+		case eDisplayConnected:
+			UpadteConnectedStatus();
+			break;
+		case eDisplayReadingStarted:
+			//UpdatePercentage();
+			break;
+		case eDisplayReadingCompltd:
+			break;
+		case eDisplayConfigMode:
+			UpdateDisplayConfigMode();
+			break;
+		case eDisplayDisconnected:
+			UpdateDisconnectedMsg();
+			break;
+	}
+
+	blUpdateFlag = false;
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Update display with custom message
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+bool UpdateDisplayWithMsg(char* cMessageToDisplay,uint8_t ucLen)
+{
+	bool blRetVal 			= false;
+	uint8_t ucFirstMsg1[15] = {0};
+	uint8_t ucFirstMsg2[25] = {0};
+
+	if (NULL != cMessageToDisplay)
+	{
+	    SSD1306_Clear();
+	    SSD1306_GotoXY (1,1);
+
+	    if (15 < ucLen)
+	    {
+	    	memcpy(ucFirstMsg1, cMessageToDisplay,15);
+	    	SSD1306_Puts ((char*)ucFirstMsg1, &Font_7x10, 1);
+	    	SSD1306_GotoXY (1, 20);
+	    	memcpy(ucFirstMsg2, cMessageToDisplay + 15, ucLen - 15);
+	    	SSD1306_Puts ((char*)ucFirstMsg2, &Font_7x10, 1);
+	    }
+	    else
+	    {
+	    	SSD1306_Puts (cMessageToDisplay, &Font_11x18, 1);
+	    }
+	    SSD1306_UpdateScreen();
+	    blRetVal = true;
+	}
+
+	return blRetVal;
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Update display with waiting for connection
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+static void UpdateDisplayConfigMode()
+{
+	SSD1306_Clear();
+    SSD1306_GotoXY (1,1);
+    SSD1306_Puts (CONFIG_MODE, &Font_7x10, 1);
+    SSD1306_UpdateScreen();
+}
+/*-----------------------------------------------------------------------------
+//Purpose   : Update display with Disconnected message
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void UpdateDisconnectedMsg()
+{
+	SSD1306_GotoXY (1, 53);
+    SSD1306_Puts (BLE_DISCONNECTED, &Font_7x10, 1);
+    SSD1306_UpdateScreen();
+}
+/*-----------------------------------------------------------------------------
+//Purpose   : Update display with waiting for connection
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+static void UpadteNotConnectedStatus()
+{
+    SSD1306_GotoXY (1,1);
+    SSD1306_Puts (READY_TO_CONNECT, &Font_7x10, 1);
+//s   SSD1306_GotoXY (10, 30);
+//s    SSD1306_Puts (CONNECTION_MSG, &Font_7x10, 1);
+    SSD1306_UpdateScreen();
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Update Reading completed
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void UpadteDaqCompletedStatus()
+{
+    SSD1306_GotoXY (1,1);
+    SSD1306_Puts (DAQ_COMPLETED1, &Font_7x10, 1);
+    SSD1306_GotoXY (1, 20);
+    SSD1306_Puts (DAQ_COMPLETED2, &Font_7x10, 1);
+    SSD1306_GotoXY (1,30);
+    SSD1306_Puts ("               ", &Font_7x10, 1);
+    SSD1306_UpdateScreen();
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Update memory Reading completed
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void UpadteMemoryReadCompletedStatus()
+{
+    SSD1306_GotoXY (1,1);
+    SSD1306_Puts (MEMORY_READ_COMPLTD, &Font_7x10, 1);
+    SSD1306_GotoXY (1, 20);
+    SSD1306_Puts (DAQ_COMPLETED2, &Font_7x10, 1);
+    SSD1306_GotoXY (1, 30);
+    SSD1306_Puts ("               ", &Font_7x10, 1);
+    SSD1306_UpdateScreen();
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Update display with connected status
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void UpadteConnectedStatus()
+{
+	if (eReadingStatusUnknown == GetReadingStatus())
+	{
+	    SSD1306_Clear();
+	}
+
+    SSD1306_GotoXY (1, 53);
+    SSD1306_Puts (CONNECTED_MSG, &Font_7x10, 1);
+    SSD1306_UpdateScreen();
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Set or increment the percentage
+//Inputs    : blInrimentFlg - to indicate increase %,  ucChangePercentage - amount
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+static void UpdatePercentage()
+{
+	char ucDisplayPercentage[5] = { 0, };
+	static uint8_t ucPercentage = 0;
+	static bool blInitDone = false;
+
+	if (0 == (ucPercentage = GetPercentage()))
+	{
+		blInitDone = false;
+	}
+
+	if(!blInitDone)
+	{
+		//SSD1306_Clear();
+		SSD1306_GotoXY (1,1);
+
+		if (eReadingFromFlash == GetReadingState())
+		{
+			SSD1306_Puts (READ_FROM_MEMORY, &Font_7x10, 1);  // this part along with percentage is working
+		}
+		else
+		{
+			SSD1306_Puts (COLLECTING_DATA, &Font_7x10, 1); // this one collecting data only appears, percentage is not shown, while debugging it entrs the percentage portion. but doesnt updates on display
+		}
+
+		SSD1306_UpdateScreen();
+		blInitDone = 1;
+	}
+
+	sprintf(ucDisplayPercentage,"%d %%", ucPercentage);  // percentage display
+	SSD1306_GotoXY (45, 20);
+	SSD1306_Puts (ucDisplayPercentage, &Font_11x18, 1);
+
+	//SSD1306_Puts ("             ", &Font_11x18, 1);
+	SSD1306_UpdateScreen();
+
+	/*	if(ucPercentage < 10)
+	{
+		SSD1306_GotoXY (53, 20);
+	}
+	else if (ucPercentage <= 100)
+	{
+		SSD1306_GotoXY (45, 20);
+	}
+	SSD1306_Puts (ucDisplayPercentage, &Font_11x18, 1);
+	SSD1306_UpdateScreen();
+	*/
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Set or increment the percentage
+//Inputs    : blInrimentFlg - to indicate increase %,  ucChangePercentage - amount
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void SetPercentage(bool blInrimentFlg, uint8_t ucChangePercentage)
+{
+	if ((100 == ucProcessPercentage) && (true == blInrimentFlg))
+	{
+		return;
+	}
+
+	if (blInrimentFlg)
+	{
+		ucProcessPercentage = ucChangePercentage;
+
+		if (100 < ucChangePercentage)
+		{
+			ucProcessPercentage = 100;
+			blUpdateFlag = true;
+		}
+	}
+	else if(0 == ucChangePercentage)
+	{
+		ucProcessPercentage = 0;
+	}
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Increment percentage
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void IncreasePercentage(bool bFirstFlag)
+{
+	/*
+	 * Do the calculation here 10 iteration
+	 * so each step is 10%
+	 */
+	if (100 > ucProcessPercentage)
+	{
+		if (true == bFirstFlag)
+		{
+			ucProcessPercentage = 0;
+		}
+		else
+		{
+			ucProcessPercentage += 10;
+		}
+		UpdatePercentage();
+	}
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Set 100 percentage
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void SetCompletedDisplayStatus()
+{
+	ucProcessPercentage = 100;
+	blUpdateFlag = true;
+	DisplayHandler();
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Process command
+//Inputs    : blInrimentFlg - to indicate increase %,  ucChangePercentage - amount
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+uint8_t GetPercentage()
+{
+	return ucProcessPercentage;
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Get Display status
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+eDisplyStatus GetDisplayStatus()
+{
+	return eDispStatus;
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Set Display status
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void SetDisplayStatus(eDisplyStatus eStatus)
+{
+	eDispStatus = eStatus;
+	blUpdateFlag = true;
+	DisplayHandler();
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Put welcome Logo on the display
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void C_METwelcomeLogo()
+{
+	SSD1306_Init();
+	HAL_Delay(500);
+	SSD1306_GotoXY (0,20);
+    SSD1306_Puts (" C-MET", &Font_16x26, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(2000);
+	SSD1306_Clear ();
+}
+

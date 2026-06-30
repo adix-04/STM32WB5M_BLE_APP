@@ -40,7 +40,17 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+#define DEVICEID_LEN			10
+#define DAQID_LEN				10
+#define DAQ_ID					"MD42311000" // It will change
+#define WEARABLE_ID				"WD12345678"
+#define SW_VERSION				"v5.1"
+#define HW_VERSION				"v4.2"
+#define WD_ID					"WD00001"
+#define WD_SIZE					"XXXL"
+#define LENGTH_OF_DEV_ID		10
+#define LENGTH_OF_WEARABLE_ID	10
+#define MAX_READING_ITERATION	10
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -50,6 +60,24 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
+typedef enum __eWearableSize
+{
+	eWearableSizeInvalid 	= 0,
+	eWearableSmall			= 1,
+	eWearableMedium			= 2,
+	eWearableLarge			= 3,
+	eWearableXlarge			= 4,
+	eWearableXXlarge		= 5,
+	eWearableXXXlarge		= 6,
+	eWearableFullSize		= 7
+}_eWearableSize;
+
+typedef struct __sDeviceInfoData
+{
+	uint8_t		 	ucDeviceId[DEVICEID_LEN];
+	uint8_t 		ucWearableId[DAQID_LEN];
+	_eWearableSize	eWearableSize;
+} _sDeviceInfoData;
 
 /* USER CODE END EM */
 
