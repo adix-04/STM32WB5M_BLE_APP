@@ -1,9 +1,9 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file    rf.c
-  * @brief   This file provides code for the configuration
-  *          of the RF instances.
+  * @file    usb.h
+  * @brief   This file contains all the function prototypes for
+  *          the usb.c file
   ******************************************************************************
   * @attention
   *
@@ -17,31 +17,36 @@
   ******************************************************************************
   */
 /* USER CODE END Header */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __USB_H__
+#define __USB_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
-#include "rf.h"
+#include "main.h"
 
-/* USER CODE BEGIN 0 */
+/* USER CODE BEGIN Includes */
 
-/* USER CODE END 0 */
+/* USER CODE END Includes */
 
-/* RF init function */
-void MX_RF_Init(void)
-{
+extern PCD_HandleTypeDef hpcd_USB_FS;
 
-  /* USER CODE BEGIN RF_Init 0 */
+/* USER CODE BEGIN Private defines */
 
-  /* USER CODE END RF_Init 0 */
+/* USER CODE END Private defines */
 
-  /* USER CODE BEGIN RF_Init 1 */
+void MX_USB_PCD_Init(void);
 
-  /* USER CODE END RF_Init 1 */
-  /* USER CODE BEGIN RF_Init 2 */
+/* USER CODE BEGIN Prototypes */
 
-  /* USER CODE END RF_Init 2 */
+/* USER CODE END Prototypes */
 
+#ifdef __cplusplus
 }
+#endif
 
-/* USER CODE BEGIN 1 */
-
-/* USER CODE END 1 */
+#endif /* __USB_H__ */
 
