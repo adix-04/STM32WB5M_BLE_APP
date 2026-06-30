@@ -366,19 +366,19 @@ static bool ScreeningDataPayloadBuilder()
 	else
 	{
 		sCreenDataPayload.ucReq_type 			= eLiveScreeningPayload + '0';
-
-		if (GetRtcTime(&sCurrentTime) && GetRtcDate(&sCurrentDate))
-		{
-			/* Convert time stamp to the receptor format */
-			sprintf(sCreenDataPayload.ucTimeStamp,"%02d%02d%02d%02d%02d%02d",
-					sCurrentDate.Date, sCurrentDate.Month, sCurrentDate.Year,
-				sCurrentTime.Hours, sCurrentTime.Minutes, sCurrentTime.Seconds);
-		}
-		else
-		{
-			// Set error code here
-			return blRetVal;
-		}
+//
+//		if (GetRtcTime(&sCurrentTime) && GetRtcDate(&sCurrentDate))
+//		{
+//			/* Convert time stamp to the receptor format */
+//			sprintf(sCreenDataPayload.ucTimeStamp,"%02d%02d%02d%02d%02d%02d",
+//					sCurrentDate.Date, sCurrentDate.Month, sCurrentDate.Year,
+//				sCurrentTime.Hours, sCurrentTime.Minutes, sCurrentTime.Seconds);
+//		}
+//		else
+//		{
+//			// Set error code here
+//			return blRetVal;
+//		}
 	}
 
 	memcpy(sCreenDataPayload.ucPayload, FINAL_TEMP,sizeof(FINAL_TEMP) );
@@ -507,7 +507,7 @@ static bool HandleAppInitMessagePckt(uint8_t* ucAppnitPacket, uint16_t usDataLen
 			if (sAppInitPckt.ucInitCmd == 'I')
 			{
 				/* Process the time stamp here */
-				SetRtcTime((char*)&sAppInitPckt.ucTimeStamp[0]);
+				//SetRtcTime((char*)&sAppInitPckt.ucTimeStamp[0]);
 				blRetVal = true;
 			}
 		}
@@ -573,7 +573,7 @@ static bool HandleSetConfigDetailsPckt(uint8_t* ucConfigPacket, uint16_t usDataL
 		{
 			memcpy(&sTempData.ucReq_type, ucConfigPacket, usDataLen);
 			memcpy(&sConfigurationData, &(sTempData.sSetConfData), sizeof(sConfigurationData));
-			SetRtcTime((char*)&sConfigurationData.ucTimeStamp[0]);
+			//SetRtcTime((char*)&sConfigurationData.ucTimeStamp[0]);
 			//GetDeviceInfo(&sGetdevInfo);
 
 			if(0 != (memcmp(sGetdevInfo.ucDeviceId, sConfigurationData.ucDaqId,DEVICEID_LEN)))
@@ -594,7 +594,7 @@ static bool HandleSetConfigDetailsPckt(uint8_t* ucConfigPacket, uint16_t usDataL
 //			FlashErasePatientResultData();
 #endif
 			vlRetVal = true;
-			GetRtcTime(&t);
+			//GetRtcTime(&t);
 			BasicInfoRegistered();
 			SetConfigFlag();
 		}

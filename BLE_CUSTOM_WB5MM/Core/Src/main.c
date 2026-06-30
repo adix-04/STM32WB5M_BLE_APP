@@ -34,10 +34,13 @@
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
 _sDeviceInfoData sDeviceInfo					= {0};
+static _eOperationMode eOpMode					= eUnknownMode;
+static _eBleConnectionStatus eBleCurrentStatus	= eBleStatusUnknown;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+static void UpdateConnectionStatusOnDisplay();
 
 /* USER CODE END PD */
 
@@ -49,7 +52,7 @@ _sDeviceInfoData sDeviceInfo					= {0};
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+float FINAL_TEMP[48];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -61,7 +64,13 @@ void PeriphCommonClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static uint8_t handle_req = 0;
 
+
+void handle_flash_write()
+{
+	handle_req = 1;
+}
 /* USER CODE END 0 */
 
 /**
@@ -116,12 +125,17 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   C_METwelcomeLogo();
+  DeviceInfoLogo();
+  SetDisplayStatus(eDisplayNotConnected);
   //DisplayDAQ_Id();
 
   while (1)
   {
     /* USER CODE END WHILE */
     MX_APPE_Process();
+    UpdateConnectionStatusOnDisplay();
+    BlePacketHandler();
+
     //DisplayHandler();
 
     /* USER CODE BEGIN 3 */
@@ -213,6 +227,77 @@ void PeriphCommonClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+_eBleConnectionStatus GetBleConnectionStatus()
+{
+	return eBleCurrentStatus;
+}
+
+static void UpdateConnectionStatusOnDisplay()
+{
+	static _eBleConnectionStatus ePrvStatus = eBleStatusUnknown;
+
+	if (eOpMode == eCOnfigMode)
+	{
+		return;
+	}
+
+	if ((eBleStatusUnknown == GetBleConnectionStatus()) ||
+									(ePrvStatus == GetBleConnectionStatus()))
+	{
+		return;
+	}
+
+	ePrvStatus = GetBleConnectionStatus();
+
+	switch(ePrvStatus)
+	{
+		case eBleStatusDisConnected:
+			UpdateDisconnectedMsg();
+			break;
+
+		case eBleStatusConnected:
+			UpadteConnectedStatus();
+			break;
+
+		case eBleStatusUnknown:
+		default:
+			break;
+	}
+
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Set the error status of the device
+//Inputs    : None
+//Outputs   : None
+//Return    : eErrorStatus - status
+//Notes     : None
+-----------------------------------------------------------------------------*/
+static void ProcessBattery(void)
+{
+	static uint32_t ulTimeNext 	= 0;
+	uint32_t ulBatUpdate		= 0;
+
+	if (eReadingStatusReadingInProgrs == GetReadingStatus())
+	{
+		return;
+	}
+
+	if (ulTimeNext < HAL_GetTick())
+	{
+		ulTimeNext 	= HAL_GetTick() + BATTERY_UPDATE_PERIOD;
+		UpdateBatteryVoltageOnDisplay();
+	}
+
+	if (10 > GetBatteryPercentage())
+	{
+		SetDaqErrorStatus(eErrorBatLOw);
+	}
+	else
+	{
+		ClearDaqErrorStatus(eErrorBatLOw);
+	}
+}
 
 /* USER CODE END 4 */
 
