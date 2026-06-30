@@ -51,6 +51,9 @@ extern "C" {
 #define LENGTH_OF_DEV_ID		10
 #define LENGTH_OF_WEARABLE_ID	10
 #define MAX_READING_ITERATION	10
+#define CONFIG_THROUGH_XMODEM
+#define BATTERY_UPDATE_PERIOD		2500
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -79,13 +82,34 @@ typedef struct __sDeviceInfoData
 	_eWearableSize	eWearableSize;
 } _sDeviceInfoData;
 
+typedef enum __eBleConnectionStatus
+{
+	eBleStatusUnknown 		= 0,
+	eBleStatusDisConnected 	= 1,
+	eBleStatusConnected		= 2
+}_eBleConnectionStatus;
+
+typedef enum __eOperationMode
+{
+	eUnknownMode	= 0,
+	eCOnfigMode		= 1
+}_eOperationMode;
+
+typedef enum __eReadingStatus
+{
+	eReadingStatusUnknown 			= 0,
+	eReadingStatusReqReceived		= 1,
+	eReadingStatusReadingInProgrs 	= 2
+}_eReadingStatus;
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
+_eBleConnectionStatus GetBleConnectionStatus();
+_eReadingStatus GetReadingStatus();
+void SetReadingStatus(_eReadingStatus eRequest);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
