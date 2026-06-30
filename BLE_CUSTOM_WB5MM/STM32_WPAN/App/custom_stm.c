@@ -65,8 +65,8 @@ extern uint16_t Connection_Handle;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-uint16_t SizeWrite = 1;
-uint16_t SizeNotify = 1;
+uint16_t SizeWrite = 247;
+uint16_t SizeNotify = 247;
 
 /**
  * START of Section BLE_DRIVER_CONTEXT
@@ -371,7 +371,7 @@ void SVCCTL_InitCustomSvc(void)
                           SizeNotify,
                           CHAR_PROP_READ | CHAR_PROP_NOTIFY,
                           ATTR_PERMISSION_NONE,
-                          GATT_NOTIFY_ATTRIBUTE_WRITE | GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP | GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
+                          GATT_NOTIFY_WRITE_REQ_AND_WAIT_FOR_APPL_RESP | GATT_NOTIFY_READ_REQ_AND_WAIT_FOR_APPL_RESP,
                           0x10,
                           CHAR_VALUE_LEN_VARIABLE,
                           &(CustomContext.CustomNotifyHdle));
