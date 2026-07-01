@@ -113,6 +113,34 @@ void SetReadingStatus(_eReadingStatus eRequest);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define MUX1_ADC_Pin GPIO_PIN_2
+#define MUX1_ADC_GPIO_Port GPIOA
+#define MUX2_ADC_Pin GPIO_PIN_1
+#define MUX2_ADC_GPIO_Port GPIOA
+#define GATE_Pin GPIO_PIN_7
+#define GATE_GPIO_Port GPIOB
+#define LD1_Pin GPIO_PIN_5
+#define LD1_GPIO_Port GPIOB
+#define A2_Pin GPIO_PIN_12
+#define A2_GPIO_Port GPIOA
+#define A3_Pin GPIO_PIN_11
+#define A3_GPIO_Port GPIOA
+#define B2_Pin GPIO_PIN_0
+#define B2_GPIO_Port GPIOD
+#define B2D1_Pin GPIO_PIN_1
+#define B2D1_GPIO_Port GPIOD
+#define BUZZER_PIN_Pin GPIO_PIN_6
+#define BUZZER_PIN_GPIO_Port GPIOB
+#define B1_Pin GPIO_PIN_4
+#define B1_GPIO_Port GPIOC
+#define MUX3_ADC_Pin GPIO_PIN_8
+#define MUX3_ADC_GPIO_Port GPIOA
+#define A0_Pin GPIO_PIN_7
+#define A0_GPIO_Port GPIOA
+#define A1_Pin GPIO_PIN_6
+#define A1_GPIO_Port GPIOA
+#define VCC_REF_Pin GPIO_PIN_3
+#define VCC_REF_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

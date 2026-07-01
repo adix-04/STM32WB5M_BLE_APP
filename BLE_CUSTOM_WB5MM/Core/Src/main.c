@@ -18,12 +18,14 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
 #include "i2c.h"
 #include "ipcc.h"
 #include "rf.h"
 #include "rtc.h"
+#include "tim.h"
 #include "usart.h"
-#include "usb.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -53,6 +55,7 @@ static void UpdateConnectionStatusOnDisplay();
 
 /* USER CODE BEGIN PV */
 float FINAL_TEMP[48];
+char msg[100];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -110,10 +113,12 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_RTC_Init();
   MX_I2C1_Init();
-  MX_USB_PCD_Init();
   MX_USART1_UART_Init();
+  MX_ADC1_Init();
+  MX_TIM16_Init();
   MX_RF_Init();
   /* USER CODE BEGIN 2 */
 
@@ -127,18 +132,35 @@ int main(void)
   C_METwelcomeLogo();
   DeviceInfoLogo();
   SetDisplayStatus(eDisplayNotConnected);
+  RestoreConfigDataFromFlash();
+
   //DisplayDAQ_Id();
 
   while (1)
   {
+//	  if (eOpMode == eCOnfigMode)
+//	  	{
+//	  		ConfigurationModeHandler();
+//	  	}
+//	  		/* Here the live data reading can be tracked and controlled */
+//	  	else if ( eReadingStatusReadingInProgrs == GetReadingStatus() && (ucReadingIterator))
+//	  	{
+//	  		ProcessLiveReading();
+//	  	}
+//	  		/* Flash data reading */
+//	  	else if ( eReadingFromFlash == GetReadingState())
+//	  	{
+//	  		ProcessReadingFromFlash();
+//	  		HAL_Delay(250);
+//	  	}
+    UpdateConnectionStatusOnDisplay();
+	BlePacketHandler();
     /* USER CODE END WHILE */
     MX_APPE_Process();
-    UpdateConnectionStatusOnDisplay();
-    BlePacketHandler();
-
-    //DisplayHandler();
 
     /* USER CODE BEGIN 3 */
+
+
     //HAL_Delay(1);
   }
   /* USER CODE END 3 */
@@ -165,12 +187,11 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI48|RCC_OSCILLATORTYPE_HSI
-                              |RCC_OSCILLATORTYPE_HSE|RCC_OSCILLATORTYPE_LSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_HSE
+                              |RCC_OSCILLATORTYPE_LSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.LSEState = RCC_LSE_ON;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
