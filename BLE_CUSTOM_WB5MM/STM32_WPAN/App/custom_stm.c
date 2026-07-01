@@ -23,7 +23,10 @@
 #include "custom_stm.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "usart.h"
+#include "bleDB.h"
+#include "DisplayHandler.h"
+#include "main.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -39,7 +42,7 @@ typedef struct{
 
 extern uint16_t Connection_Handle;
 /* USER CODE BEGIN PTD */
-
+extern char msg[50];
 /* USER CODE END PTD */
 
 /* Private defines -----------------------------------------------------------*/
@@ -54,7 +57,7 @@ extern uint16_t Connection_Handle;
 #define BM_REQ_CHAR_SIZE    (3)
 
 /* USER CODE BEGIN PD */
-
+uint8_t dss;
 /* USER CODE END PD */
 
 /* Private macros ------------------------------------------------------------*/
@@ -193,14 +196,67 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
           {
             return_value = SVCCTL_EvtAckFlowEnable;
             /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
-
+            dss=  Notification.DataTransfered.pPayload[0];
+            strcpy(msg,attribute_modified->Attr_Data);
+            HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
             /* USER CODE END CUSTOM_STM_Service_1_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
-          } /* if (attribute_modified->Attr_Handle == (CustomContext.CustomWriteHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))*/
+           /* if (attribute_modified->Attr_Handle == (CustomContext.CustomWriteHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))*/
           /* USER CODE BEGIN EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
+            notification_complete = (aci_gatt_notification_complete_event_rp0*)blecore_evt->data;
+            Notification.Custom_Evt_Opcode = CUSTOM_STM_NOTIFICATION_COMPLETE_EVT;
+            Notification.AttrHandle = notification_complete->Attr_Handle;
+            Custom_STM_App_Notification(&Notification);
+  	#ifdef PACKET_HANDLING_ENABLED
+     /*
+      * comparing ucStartSCreen with the received packet
+      */
+            if(0 == memcmp(attribute_modified->Attr_Data,ucStartSCreen, sizeof(ucStartSCreen)))
+            	  {
+          	  	  SetDisplayStatus(eDisplayConnected);
+          	  	  strcpy(msg,"yess");
+          	  	  if(run==0)
+          	  	  {
+          	  		  HAL_GPIO_WritePin(	GATE_GPIO_Port, GATE_Pin, GPIO_PIN_SET);
 
-          /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
+          	  		  if ( HAL_ADC_Start_DMA(&hadc1, (uint32_t *)ADC_DATA, 4) != HAL_OK)
+          	  		  {
+          	  			  Error_Handler();
+
+          	  		  }
+          	  		  run=1;
+          	  	  }
+          	  	  else
+          	  	  {
+          	  		  HAL_GPIO_WritePin(	GATE_GPIO_Port, GATE_Pin, GPIO_PIN_SET);
+
+          	  		  HAL_ADC_Start_IT(&hadc1);
+
+          	  	  }
+            	  }
+            	  else if(0 == memcmp(attribute_modified->Attr_Data,ucReadAlreadySavedData, sizeof(ucReadAlreadySavedData)))
+            	  	  {
+            		  	  SetRedaingState(eReadingFromFlash);
+            	  	  }
+
+            	  if(strstr(msg,start))
+            	  	  {
+            		  	  SetReadingStatus(eReadingStatusReqReceived);
+            	  	  }
+            	  	  else if(strstr(msg,"read"))
+            	  	   {
+            	  		  SetRedaingState(eReadingFromFlash);
+            	  	   }
+
+      HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
+#else
+    if ( PushToBleRxDataBase(attribute_modified->Attr_Data,attribute_modified->Attr_Data_Length))
+    {
+    	BleDataSetRequestStatus(eBleRequestReceived);
+    	//memset(attribute_modified->Attr_Data,0x00,(BLE_EVT_MAX_PARAM_LEN - 2) - 8);
+    }     /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
+#endif
+          }
           break;
-
         case ACI_GATT_READ_PERMIT_REQ_VSEVT_CODE :
           /* USER CODE BEGIN EVT_BLUE_GATT_READ_PERMIT_REQ_BEGIN */
 
@@ -236,10 +292,8 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
           /* USER CODE BEGIN EVT_BLUE_GATT_NOTIFICATION_COMPLETE_BEGIN */
 
           /* USER CODE END EVT_BLUE_GATT_NOTIFICATION_COMPLETE_BEGIN */
-          notification_complete = (aci_gatt_notification_complete_event_rp0*)blecore_evt->data;
-          Notification.Custom_Evt_Opcode = CUSTOM_STM_NOTIFICATION_COMPLETE_EVT;
-          Notification.AttrHandle = notification_complete->Attr_Handle;
-          Custom_STM_App_Notification(&Notification);
+
+
           /* USER CODE BEGIN EVT_BLUE_GATT_NOTIFICATION_COMPLETE_END */
 
           /* USER CODE END EVT_BLUE_GATT_NOTIFICATION_COMPLETE_END */

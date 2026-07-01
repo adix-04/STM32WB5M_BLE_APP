@@ -29,7 +29,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "bleDB.h"
+#include "DisplayHandler.h"
+#include "adc.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -73,7 +75,7 @@ uint8_t UpdateCharData[512];
 uint8_t NotifyCharData[512];
 uint16_t Connection_Handle;
 /* USER CODE BEGIN PV */
-
+extern char msg[50];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -82,7 +84,53 @@ static void Custom_Notify_Update_Char(void);
 static void Custom_Notify_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
+void my_Task(void)
+{
+	uint8_t* ucPayload = NULL;
+	uint16_t unDataLen = GetBleTxDataBaseMessageLen();
+	HAL_NVIC_ClearPendingIRQ(ADC1_IRQn);
 
+	if (0 < unDataLen)
+	{
+		memset(UpdateCharData, 0X00, sizeof(UpdateCharData));// need to change the size of UpdateCharData//
+		memcpy(UpdateCharData, (uint8_t*)PopFromBleTxDataBase(), unDataLen);
+		Custom_Notify_Update_Char();
+		//Custom_My_char_notify_Update_Char();
+		HAL_Delay(50);
+		ClearBleTxDataBase();
+		BleDataSetRequestStatus(eBleStatusError);
+	}
+#if 0
+	for(p=0;p<48;p++)
+	{
+	 	 sprintf((uint8_t*)UpdateCharData,"%.4f %d",FINAL_TEMP[p],p);
+ 	 Custom_My_char_notify_Update_Char();
+ 	 HAL_Delay(50);
+	}
+	q++;
+
+	if (eReadingFromFlash != GetReadingState())
+	{
+
+		if (0 == ucCount)
+		{
+			FlashSavePatientResultData(FINAL_TEMP,1);
+			ucCount++;
+		}
+		else if(10 > ucCount)
+		{
+			FlashSavePatientResultData(FINAL_TEMP,0);
+			ucCount++;
+		}
+		else
+		{
+			//DAQfinishBuzzerPlay();
+			ucCount = 0;
+			//HAL_ADC_Stop_IT(&hadc1);
+		}
+	}
+#endif
+}
 /* USER CODE END PFP */
 
 /* Functions Definition ------------------------------------------------------*/
@@ -196,7 +244,7 @@ void Custom_APP_Init(void)
  *************************************************************/
 
 /* MDTEST */
-__USED void Custom_Notify_Update_Char(void) /* Property Read */
+ void Custom_Notify_Update_Char(void) /* Property Read */
 {
   uint8_t updateflag = 0;
 
