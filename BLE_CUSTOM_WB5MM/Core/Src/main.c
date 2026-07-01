@@ -38,6 +38,7 @@
 _sDeviceInfoData sDeviceInfo					= {0};
 static _eOperationMode eOpMode					= eUnknownMode;
 static _eBleConnectionStatus eBleCurrentStatus	= eBleStatusUnknown;
+static uint8_t ucReadingTrack 					= 0;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -129,12 +130,14 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  FlashReadDeviceId(&sDeviceInfo);
+
   C_METwelcomeLogo();
   DeviceInfoLogo();
   SetDisplayStatus(eDisplayNotConnected);
   RestoreConfigDataFromFlash();
 
-  //DisplayDAQ_Id();
+  DisplayDAQ_Id();
 
   while (1)
   {
@@ -285,6 +288,26 @@ static void UpdateConnectionStatusOnDisplay()
 			break;
 	}
 
+}
+bool GetReadingIterationStatus()
+{
+	bool blBretVal = false;
+
+	if ((0 < ucReadingTrack) && (MAX_READING_ITERATION > ucReadingTrack))
+	{
+		blBretVal = true;
+	}
+
+	return blBretVal;
+}
+void GetDeviceInfo(_sDeviceInfoData* sDeviceInfoData )
+{
+	memcpy(sDeviceInfoData, &sDeviceInfo, sizeof(_sDeviceInfoData));
+	//sDeviceInfoData = &sDeviceInfo;
+}
+void SetBleConnectionStatus(_eBleConnectionStatus eBleStatus)
+{
+	eBleCurrentStatus = eBleStatus;
 }
 
 /*-----------------------------------------------------------------------------

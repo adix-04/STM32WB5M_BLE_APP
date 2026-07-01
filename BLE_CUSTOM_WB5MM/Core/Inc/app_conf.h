@@ -118,8 +118,8 @@
 /**
  * Device name configuration for Generic Access Service
  */
-#define CFG_GAP_DEVICE_NAME             "WB5MM"
-#define CFG_GAP_DEVICE_NAME_LENGTH      (5)
+#define CFG_GAP_DEVICE_NAME             "CMET"
+#define CFG_GAP_DEVICE_NAME_LENGTH      (4)
 
 /**
  * Define PHY

@@ -11,7 +11,7 @@
 #include "RTC.h"
 #include "FlashMemory.h"
 #include "DisplayHandler.h"
-
+#include <string.h>
 #include <stdint.h>
 
 #define SWAPBYTES(c) ( (c << 8) + (c >> 8))
@@ -537,7 +537,7 @@ static bool BuildAppInitMessageResponse()
 	//GetDeviceInfo(&sDeviceInfo);
 	memcpy(sAppInitRespPckt.ucDaqId,sDeviceInfo.ucDeviceId, DAQ_ID_LEN);
 	memcpy(sAppInitRespPckt.ucSubjectWdId,sDeviceInfo.ucWearableId, SUBJECT_WD_ID_LEN);
-	memcpy(sAppInitRespPckt.ucSubjectWdSize,ucpWearableSize[sDeviceInfo.eWearableSize-1],strlen(ucpWearableSize[sDeviceInfo.eWearableSize -1 ]));
+	memcpy(sAppInitRespPckt.ucSubjectWdSize,ucpWearableSize[sDeviceInfo.eWearableSize-1],5);  //strlen(ucpWearableSize[sDeviceInfo.eWearableSize -1 ])
 	sAppInitRespPckt.ucBatteryPercentage 	= GetBatteryPercentage();
 
 	sAppInitRespPckt.unCheckSum=calculateCRC((unsigned char*) &sAppInitRespPckt, sizeof(sAppInitRespPckt) - 1);

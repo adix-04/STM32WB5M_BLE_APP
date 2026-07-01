@@ -43,6 +43,11 @@ typedef struct{
 extern uint16_t Connection_Handle;
 /* USER CODE BEGIN PTD */
 extern char msg[50];
+uint8_t dss;
+char start[50]="start";
+int abc=123;
+__IO extern int ADC_DATA[4];
+int run=0;
 /* USER CODE END PTD */
 
 /* Private defines -----------------------------------------------------------*/
@@ -57,7 +62,7 @@ extern char msg[50];
 #define BM_REQ_CHAR_SIZE    (3)
 
 /* USER CODE BEGIN PD */
-uint8_t dss;
+
 /* USER CODE END PD */
 
 /* Private macros ------------------------------------------------------------*/

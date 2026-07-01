@@ -201,13 +201,21 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
     /* USER CODE END P2PS_CUSTOM_Notification_Custom_Evt_Opcode */
     case CUSTOM_CONN_HANDLE_EVT :
       /* USER CODE BEGIN CUSTOM_CONN_HANDLE_EVT */
-
+    	if(!GetReadingIterationStatus())
+    	    {
+    	    	SetBleConnectionStatus(eBleStatusConnected);
+    	        //	SetDisplayStatus(eDisplayConnected);
+    	    }
       /* USER CODE END CUSTOM_CONN_HANDLE_EVT */
       break;
 
     case CUSTOM_DISCON_HANDLE_EVT :
       /* USER CODE BEGIN CUSTOM_DISCON_HANDLE_EVT */
-
+    	if (!GetReadingIterationStatus())
+    	    {
+    	    	SetBleConnectionStatus(eBleStatusDisConnected);
+    	        //	SetDisplayStatus (eDisplayDisconnected);
+    	    }
       /* USER CODE END CUSTOM_DISCON_HANDLE_EVT */
       break;
 
