@@ -219,7 +219,7 @@ uint8_t a_AdvData[11] =
 };
 
 /* USER CODE BEGIN PV */
-
+extern _sDeviceInfoData sDeviceInfo;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -981,18 +981,20 @@ static void Adv_Request(APP_BLE_ConnStatus_t NewStatus)
   tBleStatus ret = BLE_STATUS_INVALID_PARAMS;
 
   BleApplicationContext.Device_Connection_Status = NewStatus;
+  memcpy(&a_AdvData[2],sDeviceInfo.ucDeviceId, LENGTH_OF_DEV_ID);
   /* Start Fast or Low Power Advertising */
   ret = aci_gap_set_discoverable(ADV_TYPE,
                                  CFG_FAST_CONN_ADV_INTERVAL_MIN,
                                  CFG_FAST_CONN_ADV_INTERVAL_MAX,
                                  CFG_BLE_ADDRESS_TYPE,
                                  ADV_FILTER,
-                                 0,
-                                 0,
+								 sizeof(a_AdvData),
+							     (uint8_t*)a_AdvData,
                                  0,
                                  0,
                                  0,
                                  0);
+
   if (ret != BLE_STATUS_SUCCESS)
   {
     APP_DBG_MSG("==>> aci_gap_set_discoverable - fail, result: 0x%x \n", ret);

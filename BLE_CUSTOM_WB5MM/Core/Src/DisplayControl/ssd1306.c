@@ -657,3 +657,4 @@ void ssd1306_I2C_Write(uint8_t address, uint8_t reg, uint8_t data) {
 	dt[1] = data;
 	HAL_I2C_Master_Transmit(&hi2c1, address, dt, 2, 10);
 }
+

@@ -313,7 +313,7 @@ void SetBleConnectionStatus(_eBleConnectionStatus eBleStatus)
 /*-----------------------------------------------------------------------------
 //Purpose   : Set the error status of the device
 //Inputs    : None
-//Outputs   : None
+//Outputs   :kklx None
 //Return    : eErrorStatus - status
 //Notes     : None
 -----------------------------------------------------------------------------*/

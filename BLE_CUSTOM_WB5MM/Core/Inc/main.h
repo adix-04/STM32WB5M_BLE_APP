@@ -114,6 +114,7 @@ void SetReadingStatus(_eReadingStatus eRequest);
 bool GetReadingIterationStatus();
 void SetBleConnectionStatus(_eBleConnectionStatus eBleStatus);
 bool GetReadingIterationStatus();
+void GetDeviceInfo(_sDeviceInfoData* sDeviceInfoData );
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
