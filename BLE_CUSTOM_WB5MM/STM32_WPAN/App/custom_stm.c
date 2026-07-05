@@ -27,6 +27,9 @@
 #include "bleDB.h"
 #include "DisplayHandler.h"
 #include "main.h"
+#include "app_conf.h"
+#include "custom_app.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,10 +45,14 @@ typedef struct{
 
 extern uint16_t Connection_Handle;
 /* USER CODE BEGIN PTD */
+int abc								=123;
 extern char msg[50];
+char start[50]						="start";
 uint8_t dss;
-char start[50]="start";
-int abc=123;
+//char [10];
+extern UART_HandleTypeDef huart1;
+extern void my_Task(void);
+extern ADC_HandleTypeDef hadc1;
 __IO extern int ADC_DATA[4];
 int run=0;
 /* USER CODE END PTD */
@@ -62,7 +69,10 @@ int run=0;
 #define BM_REQ_CHAR_SIZE    (3)
 
 /* USER CODE BEGIN PD */
+uint8_t ucStartSCreen[] 			= {0x03,0x04,'S',0x8E};
+uint8_t ucReadAlreadySavedData[] 	= {0x05,0x05,'R',0X00,0xE8};
 
+uint8_t ucRcvdMsg[4] 				= {0};
 /* USER CODE END PD */
 
 /* Private macros ------------------------------------------------------------*/
@@ -73,8 +83,8 @@ int run=0;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-uint16_t SizeWrite = 247;
-uint16_t SizeNotify = 247;
+uint16_t SizeWrite 									= 247;
+uint16_t SizeNotify 								= 247;
 
 /**
  * START of Section BLE_DRIVER_CONTEXT
@@ -254,11 +264,11 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
 
       HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
 #else
-    if ( PushToBleRxDataBase(attribute_modified->Attr_Data,attribute_modified->Attr_Data_Length))
-    {
-    	BleDataSetRequestStatus(eBleRequestReceived);
-    	//memset(attribute_modified->Attr_Data,0x00,(BLE_EVT_MAX_PARAM_LEN - 2) - 8);
-    }     /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
+      	  	  if ( PushToBleRxDataBase(attribute_modified->Attr_Data,attribute_modified->Attr_Data_Length))
+      	  	  {
+      	  		  BleDataSetRequestStatus(eBleRequestReceived);
+      	  		  //memset(attribute_modified->Attr_Data,0x00,(BLE_EVT_MAX_PARAM_LEN - 2) - 8);
+      	  	  }     		/* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
 #endif
           }
           break;

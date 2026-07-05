@@ -35,15 +35,32 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-_sDeviceInfoData sDeviceInfo					= {0};
+uint8_t ucRxBuffer[12]							= {0};
 static _eOperationMode eOpMode					= eUnknownMode;
-static _eBleConnectionStatus eBleCurrentStatus	= eBleStatusUnknown;
+static _eReadingStatus eDataAqucisionStatus 	= eReadingStatusUnknown;
+static bool ucReadingIterator					= false;
 static uint8_t ucReadingTrack 					= 0;
+static _eBleConnectionStatus eBleCurrentStatus	= eBleStatusUnknown;
+_sDeviceInfoData sDeviceInfo					= {0};
+bool bPasswordGetter							= false;
+bool bOptionGetter								= false;
+bool bDeviceIdGetter							= false;
+uint8_t ucpDevId[LENGTH_OF_DEV_ID]				= {'\0'};
+bool bBackOption								= false;
+_ConfigModeStatus eConfigModeCurrentStatus		= eConfigModeUnknown;
+uint8_t ucReceivedLen							= 0;
+bool bUartReceived								= false;
+uint8_t ucEchoBuffer[12]						= {'\0'};
+
+extern char* ucpWearableSize[];
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+static void ClearReadingFlags();
 static void UpdateConnectionStatusOnDisplay();
+static void ConfigurationModeHandler();
+static void ProcessLiveReading();
 
 /* USER CODE END PD */
 
@@ -55,8 +72,43 @@ static void UpdateConnectionStatusOnDisplay();
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+long double R_TEMP;
+long double curve;
+long double final_adc_values[48];
+long double mode_values[48][60];
+long double adc_readings[48][60];
+long double value=0;
 float FINAL_TEMP[48];
+long double e1=0;
+int coeffnum;     //s
+long double coeff,err_factor;
+int R25[48];
+long double resistsnce[48];
+__IO int ADC_DATA[4];
+__IO int i=0;
 char msg[100];
+__IO int sample=0;
+int z=0;
+__IO int max[48];
+__IO int mode[48][60];
+int  count[48];
+int probe_no=0;
+int j,k,p,x;
+int repeat[48][60];
+long double final_values[48][60];
+int flag=0;
+int total;
+long double a[48];
+long double b[48];
+long double c[48];
+long double d[48];
+float R[48];
+long double avg_adc_ref[48];
+long double e1;
+long double adc_ref[48][60];
+long double mode_adc_ref[48][60];
+long double final_adc_ref[48][60];
+int n=60;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -251,9 +303,61 @@ void PeriphCommonClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+
+void ProcessDataAquesitionRequest()
+{
+	static uint8_t run = 0;/* Backward compactability */
+
+	SetDisplayStatus(eDisplayReadingStarted);
+
+	if(run == 0)
+	{
+		HAL_GPIO_WritePin(	GATE_GPIO_Port, GATE_Pin, GPIO_PIN_SET);
+
+		if ( HAL_ADC_Start_DMA(&hadc1, (uint32_t *)ADC_DATA, 4) != HAL_OK)
+		{
+			Error_Handler();
+		}
+
+		run=1;
+	}
+	else
+	{
+		HAL_GPIO_WritePin(	GATE_GPIO_Port, GATE_Pin, GPIO_PIN_SET);
+		HAL_ADC_Start_IT(&hadc1);
+		SetReadingStatus(eReadingStatusReadingInProgrs);
+		SetRedaingState(eLiveReading);
+	}
+}
+
+
 _eBleConnectionStatus GetBleConnectionStatus()
 {
 	return eBleCurrentStatus;
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Set reading status
+//Inputs    : eRequest - Set reading status
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
+void SetReadingStatus(_eReadingStatus eRequest)
+{
+	eDataAqucisionStatus = eRequest;
+}
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Set reading status
+//Inputs    : None
+//Outputs   : None
+//Return    : Get reading status
+//Notes     : None
+-----------------------------------------------------------------------------*/
+_eReadingStatus GetReadingStatus()
+{
+	return eDataAqucisionStatus;
 }
 
 static void UpdateConnectionStatusOnDisplay()

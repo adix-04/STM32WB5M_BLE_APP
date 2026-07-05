@@ -9,11 +9,11 @@
 #include "DisplayHandler.h"
 #include "main.h"
 
-static _sBleDataBase sBleTxDB	= {0};
-static _sBleDataBase sBleRxDB	= {0};
-RTC_TimeTypeDef sReadTime		= {0};
+static _sBleDataBase sBleTxDB				= {0};
+static _sBleDataBase sBleRxDB				= {0};
+RTC_TimeTypeDef sReadTime					= {0};
 static _eReadingFrom eBleReadingSource;
-static _eBleRequestStatus eBleReqStatus = eBleStatusError;
+static _eBleRequestStatus eBleReqStatus 	= eBleStatusError;
 static _eReadingFrom eRedingData;
 
 static _eReadingFrom GetBleDataReadingSource();

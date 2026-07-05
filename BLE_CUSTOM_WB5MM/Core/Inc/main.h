@@ -63,6 +63,7 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
+
 typedef enum __eWearableSize
 {
 	eWearableSizeInvalid 	= 0,
@@ -101,6 +102,19 @@ typedef enum __eReadingStatus
 	eReadingStatusReqReceived		= 1,
 	eReadingStatusReadingInProgrs 	= 2
 }_eReadingStatus;
+
+
+typedef enum __ConfigModeStatus
+{
+	eConfigModeUnknown			= 0,
+	eConfigModePasswordConfirm	= 1,
+	eConfigModeMainMenu			= 2,
+	eConfigModeDeviceIdSet		= 3,
+	eConfigModeWearableIdSet	= 4,
+	eConfigModeGetDeviceId		= 5,
+	eConfigModeGetWearableId	= 6
+} _ConfigModeStatus;
+
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
@@ -115,6 +129,7 @@ bool GetReadingIterationStatus();
 void SetBleConnectionStatus(_eBleConnectionStatus eBleStatus);
 bool GetReadingIterationStatus();
 void GetDeviceInfo(_sDeviceInfoData* sDeviceInfoData );
+void ProcessDataAquesitionRequest();
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/

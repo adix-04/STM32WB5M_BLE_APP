@@ -37,7 +37,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "app_conf.h"
 
+extern void my_Task(void);
+extern void conv_cmplt_tasks(void);
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -154,8 +157,8 @@ typedef struct
 #define FAST_ADV_TIMEOUT               (30*1000*1000/CFG_TS_TICK_VAL) /**< 30s */
 #define INITIAL_ADV_TIMEOUT            (60*1000*1000/CFG_TS_TICK_VAL) /**< 60s */
 
-#define BD_ADDR_SIZE_LOCAL    6
-#define BLE_DEFAULT_PIN                     (111111)
+#define BD_ADDR_SIZE_LOCAL    			6
+#define BLE_DEFAULT_PIN                 (111111)
 
 /* USER CODE BEGIN PD */
 

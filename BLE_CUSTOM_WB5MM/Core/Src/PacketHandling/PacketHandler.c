@@ -8,7 +8,7 @@
 #include "PacketHandler.h"
 #include "bleDB.h"
 #include "main.h"
-#include "RTC.h"
+#include "RTCC.h"
 #include "FlashMemory.h"
 #include "DisplayHandler.h"
 #include <string.h>
@@ -93,11 +93,11 @@ void BlePacketHandler()
 
 	eStatus = GetBleDataRequestStatus();
 //
-//	if ((eReadingFromFlash == GetReadingStatus())||(((*ucpReqData) != '3') &&
-//				(eReadingStatusReadingInProgrs == GetReadingStatus())))
-//	{
-//		return;
-//	}
+	if ((eReadingFromFlash == GetReadingStatus())||(((*ucpReqData) != '3') &&
+				(eReadingStatusReadingInProgrs == GetReadingStatus())))
+	{
+		return;
+	}
 
 	switch(eStatus)
 	{
@@ -367,18 +367,18 @@ static bool ScreeningDataPayloadBuilder()
 	{
 		sCreenDataPayload.ucReq_type 			= eLiveScreeningPayload + '0';
 //
-//		if (GetRtcTime(&sCurrentTime) && GetRtcDate(&sCurrentDate))
-//		{
-//			/* Convert time stamp to the receptor format */
-//			sprintf(sCreenDataPayload.ucTimeStamp,"%02d%02d%02d%02d%02d%02d",
-//					sCurrentDate.Date, sCurrentDate.Month, sCurrentDate.Year,
-//				sCurrentTime.Hours, sCurrentTime.Minutes, sCurrentTime.Seconds);
-//		}
-//		else
-//		{
-//			// Set error code here
-//			return blRetVal;
-//		}
+		if (GetRtcTime(&sCurrentTime) && GetRtcDate(&sCurrentDate))
+		{
+			/* Convert time stamp to the receptor format */
+			sprintf(sCreenDataPayload.ucTimeStamp,"%02d%02d%02d%02d%02d%02d",
+					sCurrentDate.Date, sCurrentDate.Month, sCurrentDate.Year,
+				sCurrentTime.Hours, sCurrentTime.Minutes, sCurrentTime.Seconds);
+		}
+		else
+		{
+			// Set error code here
+			return blRetVal;
+		}
 	}
 
 	memcpy(sCreenDataPayload.ucPayload, FINAL_TEMP,sizeof(FINAL_TEMP) );
@@ -409,8 +409,8 @@ static bool HandleStartScreeingDataPckt(uint8_t* ucStartScrnPck, uint16_t usData
 	if(checkCRC(ucStartScrnPck, usDataLen))
 	{
 		IncreasePercentage(true);
-		//ProcessDataAquesitionRequest();
-		//SetReadingStatus(eReadingStatusReadingInProgrs);
+		ProcessDataAquesitionRequest();
+		SetReadingStatus(eReadingStatusReadingInProgrs);
 		SetRedaingState(eLiveReading);
 		ClearDataSet();
 		vlRetVal = true;
@@ -507,7 +507,7 @@ static bool HandleAppInitMessagePckt(uint8_t* ucAppnitPacket, uint16_t usDataLen
 			if (sAppInitPckt.ucInitCmd == 'I')
 			{
 				/* Process the time stamp here */
-				//SetRtcTime((char*)&sAppInitPckt.ucTimeStamp[0]);
+				SetRtcTime((char*)&sAppInitPckt.ucTimeStamp[0]);
 				blRetVal = true;
 			}
 		}
@@ -573,8 +573,8 @@ static bool HandleSetConfigDetailsPckt(uint8_t* ucConfigPacket, uint16_t usDataL
 		{
 			memcpy(&sTempData.ucReq_type, ucConfigPacket, usDataLen);
 			memcpy(&sConfigurationData, &(sTempData.sSetConfData), sizeof(sConfigurationData));
-			//SetRtcTime((char*)&sConfigurationData.ucTimeStamp[0]);
-			//GetDeviceInfo(&sGetdevInfo);
+			SetRtcTime((char*)&sConfigurationData.ucTimeStamp[0]);
+			GetDeviceInfo(&sGetdevInfo);
 
 			if(0 != (memcmp(sGetdevInfo.ucDeviceId, sConfigurationData.ucDaqId,DEVICEID_LEN)))
 			{
@@ -802,7 +802,7 @@ static bool BuildBuzzerResponce()
 	bool blRetVal						= false;
 	_sDeviceInfoData sDeviceInfo		= {0};
 
-	//GetDeviceInfo(&sDeviceInfo);
+	GetDeviceInfo(&sDeviceInfo);
 
 	/* Check status here and generate error code */
 	sSetBuzzerPlayReq.ucReq_type	= eBuzzerResponce + '0';
