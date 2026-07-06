@@ -215,10 +215,9 @@ uint8_t index_con_int, mutex;
 /**
  * Advertising Data
  */
-uint8_t a_AdvData[11] =
+uint8_t a_AdvData[12] =
 {
-  10, AD_TYPE_COMPLETE_LOCAL_NAME, 'S', 'T', 'M', '3', '2', 'W', 'B', '5', 'M',  /* Complete name */
-
+		9, AD_TYPE_COMPLETE_LOCAL_NAME, 'g', 'D', '3', '2', '3', '1', '1', '0','0','0','0','1',  /* Complete name */
 };
 
 /* USER CODE BEGIN PV */

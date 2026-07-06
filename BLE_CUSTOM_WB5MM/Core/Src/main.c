@@ -274,7 +274,38 @@ int main(void)
   MX_TIM16_Init();
   MX_RF_Init();
   /* USER CODE BEGIN 2 */
+  getSavedConfigurationValues();
+  	FlashReadDeviceId(&sDeviceInfo);
 
+  	if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK)
+  	{
+  		/* Calibration Error */
+  		Error_Handler();
+  	}
+  	HAL_GPIO_WritePin(A0_GPIO_Port, A0_Pin, GPIO_PIN_RESET);
+  	HAL_GPIO_WritePin(A1_GPIO_Port, A1_Pin, GPIO_PIN_RESET);
+  	HAL_GPIO_WritePin(A2_GPIO_Port, A2_Pin, GPIO_PIN_RESET);
+  	HAL_GPIO_WritePin(A3_GPIO_Port, A3_Pin, GPIO_PIN_RESET);
+  	HAL_GPIO_WritePin(	GATE_GPIO_Port, GATE_Pin, GPIO_PIN_SET);
+
+
+
+    /* Init code for STM32_WPAN */
+
+    /* Infinite loop */
+    /* USER CODE BEGIN WHILE */
+
+  	for (coeffnum = 0; coeffnum < 48; coeffnum++)  //s
+  	{
+  		//sprintf(msg,"\n\n\r   a[%d]=%.18Lf",coeffnum,a[coeffnum]);
+  		HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
+  		//sprintf(msg,"\n\r   b[%d]=%.18Lf",coeffnum,b[coeffnum]);
+  		HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
+  		//sprintf(msg,"\n\r   c[%d]=%.18Lf",coeffnum,c[coeffnum]);
+  		HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
+  		//sprintf(msg,"\n\r   d[%d]=%.18Lf",coeffnum,d[coeffnum]);
+  		HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
+  	}
   /* USER CODE END 2 */
 
   /* Init code for STM32_WPAN */

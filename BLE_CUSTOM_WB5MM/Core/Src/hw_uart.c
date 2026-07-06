@@ -257,7 +257,7 @@ void HW_UART_DMA_Interrupt_Handler(hw_uart_id_t hw_uart_id)
 
     return;
 }
-
+#if 0
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     switch ((uint32_t)huart->Instance)
@@ -286,7 +286,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
     return;
 }
-
+#endif
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
     switch ((uint32_t)huart->Instance)
