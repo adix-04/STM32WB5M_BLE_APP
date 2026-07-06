@@ -130,6 +130,9 @@ void SetBleConnectionStatus(_eBleConnectionStatus eBleStatus);
 bool GetReadingIterationStatus();
 void GetDeviceInfo(_sDeviceInfoData* sDeviceInfoData );
 void ProcessDataAquesitionRequest();
+void BuzzerPlay(int num_times);
+void BuzzerPlayPiezo(void);
+uint32_t FlashSaveDeviceInfo(uint8_t *ucData);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
