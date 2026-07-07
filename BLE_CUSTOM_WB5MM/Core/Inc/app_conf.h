@@ -119,7 +119,7 @@
  * Device name configuration for Generic Access Service
  */
 #define CFG_GAP_DEVICE_NAME             "CMET"
-#define CFG_GAP_DEVICE_NAME_LENGTH      (4)
+#define CFG_GAP_DEVICE_NAME_LENGTH      (5)
 
 /**
  * Define PHY

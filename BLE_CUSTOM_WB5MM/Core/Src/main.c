@@ -272,6 +272,7 @@ int main(void)
   MX_USART1_UART_Init();
   MX_ADC1_Init();
   MX_TIM16_Init();
+  MX_I2C3_Init();
   MX_RF_Init();
   /* USER CODE BEGIN 2 */
   getSavedConfigurationValues();
@@ -288,12 +289,6 @@ int main(void)
   	HAL_GPIO_WritePin(A3_GPIO_Port, A3_Pin, GPIO_PIN_RESET);
   	HAL_GPIO_WritePin(	GATE_GPIO_Port, GATE_Pin, GPIO_PIN_SET);
 
-
-
-    /* Init code for STM32_WPAN */
-
-    /* Infinite loop */
-    /* USER CODE BEGIN WHILE */
 
   	for (coeffnum = 0; coeffnum < 48; coeffnum++)  //s
   	{

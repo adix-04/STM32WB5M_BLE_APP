@@ -45,7 +45,7 @@ typedef struct{
 
 extern uint16_t Connection_Handle;
 /* USER CODE BEGIN PTD */
-int abc								=123;
+int abc								    =123;
 extern char msg[50];
 char start[50]						="start";
 uint8_t dss;
@@ -83,8 +83,8 @@ uint8_t ucRcvdMsg[4] 				= {0};
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-uint16_t SizeWrite 									= 247;
-uint16_t SizeNotify 								= 247;
+uint16_t SizeWrite = 247;
+uint16_t SizeNotify = 247;
 
 /**
  * START of Section BLE_DRIVER_CONTEXT
@@ -268,10 +268,12 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
       	  	  {
       	  		  BleDataSetRequestStatus(eBleRequestReceived);
       	  		  //memset(attribute_modified->Attr_Data,0x00,(BLE_EVT_MAX_PARAM_LEN - 2) - 8);
-      	  	  }     		/* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
-#endif
-          }
+              }
+                #endif
+            }
+          /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
           break;
+
         case ACI_GATT_READ_PERMIT_REQ_VSEVT_CODE :
           /* USER CODE BEGIN EVT_BLUE_GATT_READ_PERMIT_REQ_BEGIN */
 
@@ -307,8 +309,10 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
           /* USER CODE BEGIN EVT_BLUE_GATT_NOTIFICATION_COMPLETE_BEGIN */
 
           /* USER CODE END EVT_BLUE_GATT_NOTIFICATION_COMPLETE_BEGIN */
-
-
+          notification_complete = (aci_gatt_notification_complete_event_rp0*)blecore_evt->data;
+          Notification.Custom_Evt_Opcode = CUSTOM_STM_NOTIFICATION_COMPLETE_EVT;
+          Notification.AttrHandle = notification_complete->Attr_Handle;
+          Custom_STM_App_Notification(&Notification);
           /* USER CODE BEGIN EVT_BLUE_GATT_NOTIFICATION_COMPLETE_END */
 
           /* USER CODE END EVT_BLUE_GATT_NOTIFICATION_COMPLETE_END */

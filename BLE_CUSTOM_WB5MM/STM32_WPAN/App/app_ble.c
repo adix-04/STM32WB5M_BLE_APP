@@ -157,8 +157,8 @@ typedef struct
 #define FAST_ADV_TIMEOUT               (30*1000*1000/CFG_TS_TICK_VAL) /**< 30s */
 #define INITIAL_ADV_TIMEOUT            (60*1000*1000/CFG_TS_TICK_VAL) /**< 60s */
 
-#define BD_ADDR_SIZE_LOCAL    			6
-#define BLE_DEFAULT_PIN                 (111111)
+#define BD_ADDR_SIZE_LOCAL    6
+#define BLE_DEFAULT_PIN                     (111111)
 
 /* USER CODE BEGIN PD */
 
@@ -217,7 +217,8 @@ uint8_t index_con_int, mutex;
  */
 uint8_t a_AdvData[12] =
 {
-		9, AD_TYPE_COMPLETE_LOCAL_NAME, 'g', 'D', '3', '2', '3', '1', '1', '0','0','0','0','1',  /* Complete name */
+  11, AD_TYPE_COMPLETE_LOCAL_NAME, 'S', 'T', 'M', '3', '2', 'W', 'B', '5', 'M', 'M',  /* Complete name */
+
 };
 
 /* USER CODE BEGIN PV */
@@ -984,20 +985,19 @@ static void Adv_Request(APP_BLE_ConnStatus_t NewStatus)
   tBleStatus ret = BLE_STATUS_INVALID_PARAMS;
 
   BleApplicationContext.Device_Connection_Status = NewStatus;
-  memcpy(&a_AdvData[2],sDeviceInfo.ucDeviceId, LENGTH_OF_DEV_ID);
   /* Start Fast or Low Power Advertising */
+  memcpy(&a_AdvData[2], sDeviceInfo.ucDeviceId, LENGTH_OF_DEV_ID);
   ret = aci_gap_set_discoverable(ADV_TYPE,
                                  CFG_FAST_CONN_ADV_INTERVAL_MIN,
                                  CFG_FAST_CONN_ADV_INTERVAL_MAX,
                                  CFG_BLE_ADDRESS_TYPE,
                                  ADV_FILTER,
-								 sizeof(a_AdvData),
-							     (uint8_t*)a_AdvData,
+                                 sizeof(a_AdvData),
+                                 (uint8_t*) a_AdvData,
                                  0,
                                  0,
                                  0,
                                  0);
-
   if (ret != BLE_STATUS_SUCCESS)
   {
     APP_DBG_MSG("==>> aci_gap_set_discoverable - fail, result: 0x%x \n", ret);

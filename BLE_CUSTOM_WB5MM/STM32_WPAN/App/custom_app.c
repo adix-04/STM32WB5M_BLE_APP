@@ -70,6 +70,12 @@ static Custom_App_Context_t Custom_App_Context;
 /**
  * END of Section BLE_APP_CONTEXT
  */
+
+uint8_t UpdateCharData[512];
+uint8_t NotifyCharData[512];
+uint16_t Connection_Handle;
+/* USER CODE BEGIN PV */
+extern char msg[50];
 uint8_t NotifyCharData[512];
 uint16_t Connection_Handle;
 
@@ -81,9 +87,6 @@ extern long double value;
 extern float FINAL_TEMP[48];
 extern int p;
 int q=0;
-
-/* USER CODE BEGIN PV */
-extern char msg[50];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -262,16 +265,17 @@ void Custom_APP_Init(void)
 /* MDTEST */
  void Custom_Notify_Update_Char(void) /* Property Read */
 {
- // uint8_t updateflag = 0;
+  uint8_t updateflag = 0;
 
   /* USER CODE BEGIN Notify_UC_1*/
-
+  Custom_STM_App_Update_Char(CUSTOM_STM_NOTIFY, (uint8_t *)UpdateCharData);
+  return;
   /* USER CODE END Notify_UC_1*/
 
- // if (updateflag != 0)
- // {
+  if (updateflag != 0)
+  {
     Custom_STM_App_Update_Char(CUSTOM_STM_NOTIFY, (uint8_t *)UpdateCharData);
- // }
+  }
 
   /* USER CODE BEGIN Notify_UC_Last*/
 
