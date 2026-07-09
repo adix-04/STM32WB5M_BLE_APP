@@ -276,31 +276,30 @@ int main(void)
   MX_RF_Init();
   /* USER CODE BEGIN 2 */
   getSavedConfigurationValues();
-  	FlashReadDeviceId(&sDeviceInfo);
+  FlashReadDeviceId(&sDeviceInfo);
 
-  	if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK)
-  	{
-  		/* Calibration Error */
-  		Error_Handler();
-  	}
-  	HAL_GPIO_WritePin(A0_GPIO_Port, A0_Pin, GPIO_PIN_RESET);
-  	HAL_GPIO_WritePin(A1_GPIO_Port, A1_Pin, GPIO_PIN_RESET);
-  	HAL_GPIO_WritePin(A2_GPIO_Port, A2_Pin, GPIO_PIN_RESET);
-  	HAL_GPIO_WritePin(A3_GPIO_Port, A3_Pin, GPIO_PIN_RESET);
-  	HAL_GPIO_WritePin(	GATE_GPIO_Port, GATE_Pin, GPIO_PIN_SET);
+  if (HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED) != HAL_OK)
+  {
+	  /* Calibration Error */
+	  Error_Handler();
+  }
+  HAL_GPIO_WritePin(A0_GPIO_Port, A0_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(A1_GPIO_Port, A1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(A2_GPIO_Port, A2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(A3_GPIO_Port, A3_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GATE_GPIO_Port, GATE_Pin, GPIO_PIN_SET);
 
-
-  	for (coeffnum = 0; coeffnum < 48; coeffnum++)  //s
-  	{
-  		//sprintf(msg,"\n\n\r   a[%d]=%.18Lf",coeffnum,a[coeffnum]);
-  		HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
-  		//sprintf(msg,"\n\r   b[%d]=%.18Lf",coeffnum,b[coeffnum]);
-  		HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
-  		//sprintf(msg,"\n\r   c[%d]=%.18Lf",coeffnum,c[coeffnum]);
-  		HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
-  		//sprintf(msg,"\n\r   d[%d]=%.18Lf",coeffnum,d[coeffnum]);
-  		HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
-  	}
+  for (coeffnum = 0; coeffnum < 48; coeffnum++) // s
+  {
+	  sprintf(msg,"\n\n\r   a[%d]=%.18Lf",coeffnum,a[coeffnum]);
+	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 100);
+	  // sprintf(msg,"\n\r   b[%d]=%.18Lf",coeffnum,b[coeffnum]);
+	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 100);
+	  // sprintf(msg,"\n\r   c[%d]=%.18Lf",coeffnum,c[coeffnum]);
+	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 100);
+	  // sprintf(msg,"\n\r   d[%d]=%.18Lf",coeffnum,d[coeffnum]);
+	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 100);
+  }
   /* USER CODE END 2 */
 
   /* Init code for STM32_WPAN */
@@ -448,14 +447,14 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 	else
 	{
 		HAL_GPIO_WritePin(GATE_GPIO_Port, GATE_Pin, GPIO_PIN_RESET);
-				adc_readings[j][sample]=(long double)ADC_DATA[2];	//readings from 0 to 15th probes(mux1)
-				adc_readings[j+16][sample]=(long double)ADC_DATA[0];//readings from 16 to 32th probes(mux2)
-				adc_readings[j+32][sample]=(long double)ADC_DATA[1];//readings from 16 to 32th probes(mux2)
-				adc_ref[j][sample]=(long double)(ADC_DATA[3]);
-				adc_ref[j+16][sample]=(long double)(ADC_DATA[3]);
-				adc_ref[j+32][sample]=(long double)(ADC_DATA[3]);
-	//	if (j==0)
-	//	{
+		adc_readings[j][sample] = (long double)ADC_DATA[2];		 // readings from 0 to 15th probes(mux1)
+		adc_readings[j + 16][sample] = (long double)ADC_DATA[0]; // readings from 16 to 32th probes(mux2)
+		adc_readings[j + 32][sample] = (long double)ADC_DATA[1]; // readings from 16 to 32th probes(mux2)
+		adc_ref[j][sample] = (long double)(ADC_DATA[3]);
+		adc_ref[j + 16][sample] = (long double)(ADC_DATA[3]);
+		adc_ref[j + 32][sample] = (long double)(ADC_DATA[3]);
+		//if (j==0)
+		//	{
 		sprintf(msg,"Readings from %dth (mux1)=%d \n",j,ADC_DATA[2]);
 		HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
 		sprintf(msg,"Readings from %dth (mux2)=%d \n",j+16,ADC_DATA[0]);//readings from 17th (mux2)
@@ -464,17 +463,16 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 		HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
 	//}
 
-
-	/*	if (j==1)
-				{
-				sprintf(msg,"Readings from %dth (mux1)=%d \n",j,ADC_DATA[1]);
-				HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
-				sprintf(msg,"Readings from %dth (mux2)=%d \n",j+16,ADC_DATA[0]);//readings from 17th (mux2)
-				HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
-				sprintf(msg,"Readings from %dth (mux1)=%d \n",j+32,ADC_DATA[2]);
-				HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
-			}  */
-	/* ___________________________________________________________________________________________________ */
+		/*	if (j==1)
+					{
+					sprintf(msg,"Readings from %dth (mux1)=%d \n",j,ADC_DATA[1]);
+					HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
+					sprintf(msg,"Readings from %dth (mux2)=%d \n",j+16,ADC_DATA[0]);//readings from 17th (mux2)
+					HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
+					sprintf(msg,"Readings from %dth (mux1)=%d \n",j+32,ADC_DATA[2]);
+					HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
+				}  */
+		/* ___________________________________________________________________________________________________ */
 
 		j++;
 
@@ -764,7 +762,13 @@ static void ProcessLiveReading()
 		//UpdateBatteryVoltageOnDisplay();
 	}
 }
-
+/*-----------------------------------------------------------------------------
+//Purpose   : Handle data read request
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
 void ProcessDataAquesitionRequest()
 {
 	static uint8_t run = 0;/* Backward compactability */
@@ -791,6 +795,13 @@ void ProcessDataAquesitionRequest()
 	}
 }
 
+/*-----------------------------------------------------------------------------
+//Purpose   : Get connected status
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
 _eBleConnectionStatus GetBleConnectionStatus()
 {
 	return eBleCurrentStatus;
@@ -1062,15 +1073,15 @@ static void ConfigurationModeHandler()
 					uart_transmit_str((uint8_t*)"\r\n\n   WD ID Size  : ");
 					uart_transmit_str((uint8_t*)ucpWearableSize[sDeviceInfo.eWearableSize-1]);
 
-					for (coeffnum = 0; coeffnum < 48; coeffnum++)  //s
+					for (coeffnum = 0; coeffnum < 48; coeffnum++)
 					{
-						//sprintf(msg,"\n\n \r   a[%d]=%.18Lf",coeffnum,a[coeffnum]);
+						sprintf(msg,"\n\n \r   a[%d]=%.18Lf",coeffnum,a[coeffnum]);
 						HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
-						//sprintf(msg,"\n\r   b[%d]=%.18Lf",coeffnum,b[coeffnum]);
+						sprintf(msg,"\n\r   b[%d]=%.18Lf",coeffnum,b[coeffnum]);
 						HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
-						//sprintf(msg,"\n\r   c[%d]=%.18Lf",coeffnum,c[coeffnum]);
+						sprintf(msg,"\n\r   c[%d]=%.18Lf",coeffnum,c[coeffnum]);
 						HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
-						//sprintf(msg,"\n\r   d[%d]=%.18Lf",coeffnum,d[coeffnum]);
+						sprintf(msg,"\n\r   d[%d]=%.18Lf",coeffnum,d[coeffnum]);
 						HAL_UART_Transmit(&huart1,(uint8_t*)msg,strlen(msg),100);
 					}
 
@@ -1132,6 +1143,14 @@ void BuzzerPlayPiezo(void)
         HAL_Delay(1);
     }
 }
+
+/*-----------------------------------------------------------------------------
+//Purpose   : Display the status
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
 static void UpdateConnectionStatusOnDisplay()
 {
 	static _eBleConnectionStatus ePrvStatus = eBleStatusUnknown;
@@ -1165,6 +1184,14 @@ static void UpdateConnectionStatusOnDisplay()
 	}
 
 }
+
+/*-----------------------------------------------------------------------------
+//Purpose   : To get the live reading status
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
 bool GetReadingIterationStatus()
 {
 	bool blBretVal = false;
@@ -1181,6 +1208,13 @@ void GetDeviceInfo(_sDeviceInfoData* sDeviceInfoData )
 	memcpy(sDeviceInfoData, &sDeviceInfo, sizeof(_sDeviceInfoData));
 	//sDeviceInfoData = &sDeviceInfo;
 }
+/*-----------------------------------------------------------------------------
+//Purpose   : Update connected status
+//Inputs    : None
+//Outputs   : None
+//Return    : None
+//Notes     : None
+-----------------------------------------------------------------------------*/
 void SetBleConnectionStatus(_eBleConnectionStatus eBleStatus)
 {
 	eBleCurrentStatus = eBleStatus;

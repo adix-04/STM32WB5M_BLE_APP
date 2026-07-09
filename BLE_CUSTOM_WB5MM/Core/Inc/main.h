@@ -127,7 +127,6 @@ _eReadingStatus GetReadingStatus();
 void SetReadingStatus(_eReadingStatus eRequest);
 bool GetReadingIterationStatus();
 void SetBleConnectionStatus(_eBleConnectionStatus eBleStatus);
-bool GetReadingIterationStatus();
 void GetDeviceInfo(_sDeviceInfoData* sDeviceInfoData );
 void ProcessDataAquesitionRequest();
 void BuzzerPlay(int num_times);

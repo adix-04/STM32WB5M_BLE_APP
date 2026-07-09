@@ -594,7 +594,7 @@ static bool HandleSetConfigDetailsPckt(uint8_t* ucConfigPacket, uint16_t usDataL
 //			FlashErasePatientResultData();
 #endif
 			vlRetVal = true;
-			//GetRtcTime(&t);
+			GetRtcTime(&t);
 			BasicInfoRegistered();
 			SetConfigFlag();
 		}
@@ -650,8 +650,8 @@ static bool HandleBuzzerPlayRequest(uint8_t* ucConfigPacket, uint16_t usDataLen)
 		{
 			memcpy(&spBuzzerReq, ucConfigPacket, sizeof(ucConfigPacket));
 
-			//BuzzerPlayPiezo();
-				//BuzzerPlay(10);
+			BuzzerPlayPiezo();
+			//BuzzerPlay(10);
 
 
 			vlRetVal = true;

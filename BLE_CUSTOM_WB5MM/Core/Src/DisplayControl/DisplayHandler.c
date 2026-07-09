@@ -6,7 +6,7 @@
  */
 #include "DisplayHandler.h"
 #include "bitmap.h"
-
+#include "MAX17043.h"
 
 #define SWAPBYTES(c) 			((c << 8) + (c >> 8))
 
@@ -29,19 +29,11 @@ static void DisplayBleLogo();
 //Return    : None
 //Notes     : None
 -----------------------------------------------------------------------------*/
-
-
-
-
-
-
-
-
 uint8_t GetBatteryPercentage()
 {
 	float Temp = 0;
 
-	//GetBatteryChargePercentage(&Temp);
+	GetBatteryChargePercentage(&Temp);
 	ucBatteryPercentage = (uint8_t) Temp;
 
 
@@ -322,7 +314,7 @@ void UpdateDisconnectedMsg()
 
 	SSD1306_GotoXY (74, 7);
 	SSD1306_Puts (BLE_DISCONNECTED, &Font_7x10, 1);
-	//if (eReadingStatusUnknown == GetReadingState())
+	if (eReadingStatusUnknown == GetReadingState())
 	{
 		ClearNotificationArea();
 		SSD1306_GotoXY (1,20);
