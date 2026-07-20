@@ -33,7 +33,7 @@ uint8_t GetBatteryPercentage()
 {
 	float Temp = 0;
 
-	GetBatteryChargePercentage(&Temp);
+	//GetBatteryChargePercentage(&Temp);
 	ucBatteryPercentage = (uint8_t) Temp;
 
 
@@ -229,7 +229,7 @@ void DisplayHandler()
 			ReadyForScreening();
 			break;
 		case eDisplayReadingStarted:
-			//UpdatePercentage();
+			 UpdatePercentage();
 			break;
 		case eDisplayReadingCompltd:
 			break;
@@ -652,204 +652,168 @@ void C_METwelcomeLogo()
 	HAL_Delay(1000);
 	SSD1306_Clear();
 
-
-
-
-
-
-	SSD1306_DrawBitmap(-4,-10, logo1, 128, 64, 1);       //IOT LOGO
+	SSD1306_DrawBitmap(-4, -10, logo1, 128, 64, 1); // IOT LOGO
 	SSD1306_UpdateScreen();
-						            		    		        HAL_Delay(42);
-						            		    		        SSD1306_Clear();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		        SSD1306_DrawBitmap(-4,-10, logo2, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo2, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10, logo3, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo3, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo4, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10 ,logo4, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo5, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo6, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10, logo5, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo7, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10 ,logo6, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo8, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10, logo7, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo9, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10, logo8, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo10, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10, logo9, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo11, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10 ,logo10, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo12, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10, logo11, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo13, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10, logo12, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo14, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            		    		               SSD1306_DrawBitmap(-4,-10, logo13, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo15, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(500);
 
-						            		    		               SSD1306_DrawBitmap(-4,-10, logo14, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(42);
-						            		    		               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo29, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
 
-						            		    		               SSD1306_DrawBitmap(-4,-10, logo15, 128, 64, 1);
-						            		    		               SSD1306_UpdateScreen();
-						            		    		               HAL_Delay(500);
+	SSD1306_GotoXY(0, 48);
+	SSD1306_Puts("    THINK GLOBALLY   ", &Font_6x8, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(1000);
 
+	SSD1306_GotoXY(0, 48);
+	SSD1306_Puts("     MAKE LOCALLY    ", &Font_6x8, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(1000);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo30, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo31, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            				               SSD1306_DrawBitmap(-4,-10, logo29, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
+	SSD1306_DrawBitmap(-4, -10, logo32, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo33, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo34, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            				               SSD1306_GotoXY (0,48);
-						            				               SSD1306_Puts ("    THINK GLOBALLY   ", &Font_6x8, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(1000);
+	SSD1306_DrawBitmap(-4, -10, logo35, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo36, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            				              				            				               SSD1306_GotoXY (0,48);
-						            				              				            				               SSD1306_Puts ("     MAKE LOCALLY    ", &Font_6x8, 1);
-						            				              				            				               SSD1306_UpdateScreen();
-						            				              				            				               HAL_Delay(1000);
-						            				              				            				               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo37, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo38, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo39, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo40, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo41, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
+	SSD1306_DrawBitmap(-4, -10, logo42, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-						            				               SSD1306_DrawBitmap(-4,-10, logo30, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
+	SSD1306_DrawBitmap(-4, -10, logo43, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
+	SSD1306_Clear();
 
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo31, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo32, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo33, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo34, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo35, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo36, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo37, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo38, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo39, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo40, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo41, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo42, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo43, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-						            				               SSD1306_Clear();
-
-
-						            				               SSD1306_DrawBitmap(-4,-10, logo44, 128, 64, 1);
-						            				               SSD1306_UpdateScreen();
-						            				               HAL_Delay(42);
-
-
-
-
+	SSD1306_DrawBitmap(-4, -10, logo44, 128, 64, 1);
+	SSD1306_UpdateScreen();
+	HAL_Delay(42);
 }
 
 /*-----------------------------------------------------------------------------

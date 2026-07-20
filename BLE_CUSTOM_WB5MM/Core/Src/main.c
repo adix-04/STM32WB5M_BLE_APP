@@ -293,11 +293,11 @@ int main(void)
   {
 	  sprintf(msg,"\n\n\r   a[%d]=%.18Lf",coeffnum,a[coeffnum]);
 	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 100);
-	  // sprintf(msg,"\n\r   b[%d]=%.18Lf",coeffnum,b[coeffnum]);
+	  sprintf(msg,"\n\r   b[%d]=%.18Lf",coeffnum,b[coeffnum]);
 	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 100);
-	  // sprintf(msg,"\n\r   c[%d]=%.18Lf",coeffnum,c[coeffnum]);
+	  sprintf(msg,"\n\r   c[%d]=%.18Lf",coeffnum,c[coeffnum]);
 	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 100);
-	  // sprintf(msg,"\n\r   d[%d]=%.18Lf",coeffnum,d[coeffnum]);
+	  sprintf(msg,"\n\r   d[%d]=%.18Lf",coeffnum,d[coeffnum]);
 	  HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), 100);
   }
   /* USER CODE END 2 */
@@ -313,7 +313,6 @@ int main(void)
   DeviceInfoLogo();
   SetDisplayStatus(eDisplayNotConnected);
   RestoreConfigDataFromFlash();
-
   DisplayDAQ_Id();
 
   while (1)

@@ -243,8 +243,8 @@ static void ProtocolParser(uint8_t* ucPayLoad, uint16_t ucMsgLen)
 	}
 	else
 	{
-		UpdateErrorCodeOnDisplay();
-		ClearAllErrorStatus();
+		//UpdateErrorCodeOnDisplay();
+		//ClearAllErrorStatus();
 	}
 }
 
